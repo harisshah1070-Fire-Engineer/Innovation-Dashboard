@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Innovation Portfolio Dashboard</title>
+<link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand-mark">
+      <div class="brand-glyph" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M16 3 C 10 8, 8 14, 8 19 a8 8 0 0 0 16 0 c 0 -5, -2 -11, -8 -16 Z" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M16 12 v13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-line1">Innovation</span>
+        <span class="brand-line2">Portfolio</span>
+      </div>
+    </div>
+
+    <nav class="side-nav" id="sideNav">
+      <button class="nav-item is-active" data-view="dashboard">
+        <span class="nav-icon"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="6" height="7" rx="1.4"/><rect x="11.5" y="2.5" width="6" height="4.5" rx="1.4"/><rect x="11.5" y="9.5" width="6" height="8" rx="1.4"/><rect x="2.5" y="12" width="6" height="5.5" rx="1.4"/></svg></span>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="projects">
+        <span class="nav-icon"><svg viewBox="0 0 20 20"><path d="M2.5 5.2A1.7 1.7 0 0 1 4.2 3.5h3l1.6 1.9h6.5a1.7 1.7 0 0 1 1.7 1.7v7.6a1.7 1.7 0 0 1-1.7 1.7H4.2a1.7 1.7 0 0 1-1.7-1.7Z"/></svg></span>
+        <span>Projects</span>
+      </button>
+      <button class="nav-item" data-view="portfolio">
+        <span class="nav-icon"><svg viewBox="0 0 20 20"><path d="M3 17V8.5M8 17V3M13 17v-6M17.5 17V6.5" stroke-linecap="round"/></svg></span>
+        <span>Portfolio</span>
+      </button>
+      <button class="nav-item" data-view="risks">
+        <span class="nav-icon"><svg viewBox="0 0 20 20"><path d="M10 2.6 18 16.4H2Z" /><path d="M10 8.3v3.6" stroke="var(--ink-0)" stroke-linecap="round"/><circle cx="10" cy="14" r="0.9" fill="var(--ink-0)" stroke="none"/></svg></span>
+        <span>Risks &amp; Issues</span>
+      </button>
+      <button class="nav-item" data-view="status">
+        <span class="nav-icon"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.4"/><path d="M10 5.6v4.6l3 2" stroke="var(--ink-0)" stroke-linecap="round"/></svg></span>
+        <span>Status Overview</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="src-pill" id="sourcePill">
+        <span class="src-dot"></span>
+        <span id="sourceLabel">Excel connected</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-title">
+        <h1>Innovation Portfolio Dashboard</h1>
+        <p>Real-time overview of innovation projects, progress and portfolio performance</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="updated-indicator">
+          <span class="updated-label">Last updated</span>
+          <span class="updated-value" id="lastUpdated">&mdash;</span>
+        </div>
+        <button class="btn-refresh" id="refreshBtn">
+          <svg viewBox="0 0 20 20" class="refresh-icon"><path d="M16.2 6.2A6.8 6.8 0 1 0 17.5 10" stroke-linecap="round"/><path d="M16.2 2.6v4h-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Refresh Data</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ FILTER BAR ============ -->
+    <section class="filterbar" id="filterBar">
+      <div class="filter-group">
+        <label>Category</label>
+        <div class="ms-select" data-key="category" id="filterCategory"></div>
+      </div>
+      <div class="filter-group">
+        <label>Brand</label>
+        <div class="ms-select" data-key="brand" id="filterBrand"></div>
+      </div>
+      <div class="filter-group">
+        <label>Project</label>
+        <div class="ms-select" data-key="project" id="filterProject"></div>
+      </div>
+      <div class="filter-group">
+        <label>Status</label>
+        <div class="ms-select" data-key="status" id="filterStatus"></div>
+      </div>
+      <div class="filter-group">
+        <label>Year</label>
+        <div class="ms-select" data-key="year" id="filterYear"></div>
+      </div>
+      <div class="filter-group filter-search">
+        <label>Search</label>
+        <div class="search-box">
+          <svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M16 16l-3.6-3.6" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" placeholder="Search project, brand, category…" />
+        </div>
+      </div>
+      <button class="btn-clear" id="clearFiltersBtn">Clear Filters</button>
+    </section>
+
+    <!-- ============ VIEW: DASHBOARD ============ -->
+    <section class="view" id="view-dashboard">
+
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="dash-grid">
+        <div class="panel panel-chart">
+          <div class="panel-head">
+            <h3>Projects by Category</h3>
+          </div>
+          <div class="panel-body">
+            <canvas id="chartCategoryHome" height="220"></canvas>
+          </div>
+        </div>
+        <div class="panel panel-chart">
+          <div class="panel-head">
+            <h3>Status Distribution</h3>
+          </div>
+          <div class="panel-body">
+            <canvas id="chartStatusHome" height="220"></canvas>
+          </div>
+        </div>
+        <div class="panel panel-table span-2">
+          <div class="panel-head">
+            <h3>Project Pipeline</h3>
+            <span class="panel-count" id="homeTableCount"></span>
+          </div>
+          <div class="panel-body no-pad">
+            <div id="homeTableWrap"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: PROJECTS ============ -->
+    <section class="view" id="view-projects" hidden>
+      <div class="panel panel-table">
+        <div class="panel-head">
+          <h3>All Projects</h3>
+          <span class="panel-count" id="projectsTableCount"></span>
+        </div>
+        <div class="panel-body no-pad">
+          <div id="projectsTableWrap"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: PORTFOLIO ============ -->
+    <section class="view" id="view-portfolio" hidden>
+      <div class="dash-grid">
+        <div class="panel panel-chart">
+          <div class="panel-head"><h3>Projects by Category</h3></div>
+          <div class="panel-body"><canvas id="chartCategory" height="240"></canvas></div>
+        </div>
+        <div class="panel panel-chart">
+          <div class="panel-head"><h3>Projects by Brand</h3></div>
+          <div class="panel-body"><canvas id="chartBrand" height="240"></canvas></div>
+        </div>
+        <div class="panel panel-chart">
+          <div class="panel-head"><h3>Projects by Status</h3></div>
+          <div class="panel-body"><canvas id="chartStatus" height="240"></canvas></div>
+        </div>
+        <div class="panel panel-chart span-2">
+          <div class="panel-head"><h3>Portfolio Progress</h3></div>
+          <div class="panel-body"><canvas id="chartProgress" height="200"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: RISKS ============ -->
+    <section class="view" id="view-risks" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Risks</h3>
+          <span class="panel-count" id="riskCount"></span>
+        </div>
+        <div class="panel-body no-pad">
+          <div class="risk-list" id="riskList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: STATUS OVERVIEW ============ -->
+    <section class="view" id="view-status" hidden>
+      <div class="status-cards" id="statusCards"></div>
+      <div class="panel">
+        <div class="panel-head"><h3>Projects by Status</h3></div>
+        <div class="panel-body no-pad">
+          <div id="statusGroups"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ PROJECT DETAIL DRAWER ============ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer">
+  <div id="drawerContent"></div>
+</aside>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/vendor/chart.min.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
